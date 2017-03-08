@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-import Foundation
 
 import Swinject
 
@@ -28,7 +26,7 @@ open class AppComponent {
 			return FileStorage();
 		}.inObjectScope(.container);
 		self.component.register(ContentViewController.self) { _ in
-			return ContentViewControllerImp();
+			return ContentViewControllerImp(position: 0, item: URL(fileURLWithPath: NSTemporaryDirectory()));
 		}.initCompleted { (_, viewController) in
 			if let viewController = viewController as? ContentViewControllerImp {
 				viewController.presenter = ContentViewControllerPresenterImp(viewController);

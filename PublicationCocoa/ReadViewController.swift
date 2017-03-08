@@ -74,7 +74,7 @@ open class ReadViewController: ToolbarController, LogType {
 	
 	open override func viewDidLoad() {
 		super.viewDidLoad();
-		BusManager.register(next: { [weak weakSelf = self] evt in
+		BusManager.register({ [weak weakSelf = self] evt in
 			if let event = evt as? PageSelectedByIndex {
 				weakSelf?.setCurrentPageText(at: event.index);
 			} else if let event = evt as? TitleChangeEvent {

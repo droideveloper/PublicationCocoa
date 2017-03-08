@@ -14,8 +14,6 @@
  * limitations under the License.
  */
  
-import Foundation
-
 public protocol FileStorageType {
 	
 	var directory: URL? { get }

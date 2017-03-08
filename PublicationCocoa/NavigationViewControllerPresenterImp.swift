@@ -59,7 +59,7 @@ class NavigationViewControllerPresenterImp: AbstractPresenter<NavigationViewCont
 		if let file = file {
 			view?.load(url: file);
 		}
-		BusManager.register(next: { [weak weakSelf = self] evt in
+		BusManager.register({ [weak weakSelf = self] evt in
 			if let event = evt as? PageSelectedByIndex {
 				weakSelf?.scrollXBy(position: event.index);
 			} else if let event = evt as? PageSelectedByUri {

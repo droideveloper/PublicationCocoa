@@ -20,7 +20,7 @@ import WebKit
 import MVPCocoa
 import Material
 
-class ContentViewControllerImp: AbstractPageViewHolder<URL, ContentViewControllerPresenter>,
+class ContentViewControllerImp: AbstractPageViewHolder<URL>,
 	ContentViewController, LogType {
 	
 	var wkWebView: WKWebView? {
@@ -33,23 +33,41 @@ class ContentViewControllerImp: AbstractPageViewHolder<URL, ContentViewControlle
 			return nil;
 		}
 	}
-	
-	override var item: URL? {
+	// we initialize this for no reason just to ignore my god damn presenter
+	var presenter: ContentViewControllerPresenter?;
+
+	override var item: URL {
 		didSet {
 			if let presenter = presenter as? ContentViewControllerPresenterImp {
 				presenter.contentUrl = item;
-			}
+			} 
 		}
+	}
+	
+	override init(position: Int, item: URL) {
+		super.init(position: position, item: item);
+		self.presenter = ContentViewControllerPresenterImp(self);
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override func viewDidLoad() {
+		super.viewDidLoad();
+		presenter?.viewDidLoad();
 	}
 	
 	override func prepare() {
 		super.prepare();
 		let wkWebView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration());
+		//
 		if let presenter = presenter {
 			wkWebView.uiDelegate = presenter.udelegate;
 			wkWebView.navigationDelegate = presenter.ndelegate;
 			wkWebView.scrollView.addGestureRecognizer(presenter.gesture);
 		}
+		
 		view.layout(wkWebView)
 			.edges();
 		let progress = UIActivityIndicatorView(activityIndicatorStyle: .gray);

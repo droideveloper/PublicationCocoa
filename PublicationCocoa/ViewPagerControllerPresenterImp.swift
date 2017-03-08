@@ -50,7 +50,7 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 	
 	override func viewDidLoad() {
 		super.viewDidLoad();
-		BusManager.register(next: { [weak weakSelf = self] evt in
+		BusManager.register({ [weak weakSelf = self] evt in
 			if let event = evt as? PageSelectedByUri {
 				weakSelf?.changeIndex(to: event.url);
 			}
@@ -62,7 +62,7 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 					if let configuration = fileStorage.read(in: directory) {
 						BusManager.post(event: TitleChangeEvent(configuration.title));
 						contents = configuration.contents;
-						view?.setCurrentPage(of: viewControllerAtIndex(index: 0), by: .forward);
+						view?.setCurrentPage(of: viewControllerAt(index: 0), by: .forward);
 					}
 				}
 			}
@@ -93,10 +93,10 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 				for (index, content) in contents.enumerated() {
 					if file == content {
 						if index < current {
-							view?.setCurrentPage(of: viewControllerAtIndex(index: index), by: .reverse);
+							view?.setCurrentPage(of: viewControllerAt(index: index), by: .reverse);
 							BusManager.post(event: PageSelectedByIndex(by: index));
 						} else if index > current {
-							view?.setCurrentPage(of: viewControllerAtIndex(index: index), by: .forward);
+							view?.setCurrentPage(of: viewControllerAt(index: index), by: .forward);
 							BusManager.post(event: PageSelectedByIndex(by: index));
 						}
 					}
@@ -107,15 +107,16 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 	
 	func indexAt(of viewController: UIPageViewController) -> Int {
 		if let viewController = viewController.viewControllers?.last as? ContentViewControllerImp {
-			return viewController.position ?? -1;
+			return viewController.position;
 		}
 		return -1;
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
 		if let viewController = viewController as? ContentViewControllerImp {
-			if let index = viewController.position {
-				return viewControllerAtIndex(index: index + 1);
+			let index = viewController.position;
+			if index < (contents?.count ?? 0) - 1 {
+				return viewControllerAt(index: index + 1);
 			}
 		}
 		return nil;
@@ -123,14 +124,15 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 		if let viewController = viewController as? ContentViewControllerImp {
-			if let index = viewController.position {
-				return viewControllerAtIndex(index: index - 1);
+			let index = viewController.position;
+			if index > 0 {
+				return viewControllerAt(index: index - 1);
 			}
 		}
 		return nil;
 	}
 	
-	func viewControllerAtIndex(index: Int) -> ContentViewControllerImp? {
+	func viewControllerAt(index: Int) -> ContentViewControllerImp? {
 		if let contents = contents, let component = view?.application?.component as? Container, let directory = directory {
 			if index >= 0 && index < contents.size() {
 				if let viewController = component.resolve(ContentViewController.self) as? ContentViewControllerImp {
