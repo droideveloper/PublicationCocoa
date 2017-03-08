@@ -57,11 +57,12 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 		}).addDisposableTo(dispose);
 		// load book
 		if let directory = directory {
-			if let injector = view.application?.dependencyInjector as? Container {
-				if let fileStorage = injector.resolve(FileStorageType.self) {
+			if let component = view?.application?.component as? Container {
+				if let fileStorage = component.resolve(FileStorageType.self) {
 					if let configuration = fileStorage.read(in: directory) {
+						BusManager.post(event: TitleChangeEvent(configuration.title));
 						contents = configuration.contents;
-						view.setCurrentPage(of: viewControllerAtIndex(index: 0), by: .forward);
+						view?.setCurrentPage(of: viewControllerAtIndex(index: 0), by: .forward);
 					}
 				}
 			}
@@ -70,9 +71,9 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 			let fileIndex = directory.appendingPathComponent(index);
 			let fileIndex2 = directory.appendingPathComponent(index2);
 			if manager.fileExists(atPath: fileIndex.path) {
-				view.addNavigationViewController(for: fileIndex, with: contents);
+				view?.addNavigationViewController(for: fileIndex, with: contents);
 			} else if manager.fileExists(atPath: fileIndex2.path) {
-				view.addNavigationViewController(for: fileIndex2, with: contents);
+				view?.addNavigationViewController(for: fileIndex2, with: contents);
 			}
 		}
 	}
@@ -92,10 +93,10 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 				for (index, content) in contents.enumerated() {
 					if file == content {
 						if index < current {
-							view.setCurrentPage(of: viewControllerAtIndex(index: index), by: .reverse);
+							view?.setCurrentPage(of: viewControllerAtIndex(index: index), by: .reverse);
 							BusManager.post(event: PageSelectedByIndex(by: index));
 						} else if index > current {
-							view.setCurrentPage(of: viewControllerAtIndex(index: index), by: .forward);
+							view?.setCurrentPage(of: viewControllerAtIndex(index: index), by: .forward);
 							BusManager.post(event: PageSelectedByIndex(by: index));
 						}
 					}
@@ -130,9 +131,9 @@ class ViewPagerControllerPresenterImp: AbstractPresenter<ViewPagerController>,
 	}
 	
 	func viewControllerAtIndex(index: Int) -> ContentViewControllerImp? {
-		if let contents = contents, let injector = view.application?.dependencyInjector as? Container, let directory = directory {
+		if let contents = contents, let component = view?.application?.component as? Container, let directory = directory {
 			if index >= 0 && index < contents.size() {
-				if let viewController = injector.resolve(ContentViewController.self) as? ContentViewControllerImp {
+				if let viewController = component.resolve(ContentViewController.self) as? ContentViewControllerImp {
 					if let path = contents.get(index: index) {
 						viewController.item = directory.appendingPathComponent(path);
 					}

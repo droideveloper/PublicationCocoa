@@ -83,7 +83,7 @@ class NavigationViewControllerImp: AbstractViewController<NavigationViewControll
 	
 	func viewFrame(width: CGFloat, height: CGFloat) {
 		if let heightConstraint = view.heightConstraint {
-			UIView.animate(withDuration: 0.1, delay: 0.0, options: .curveEaseOut,  animations: { [weak weakSelf = self] in
+			UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut,  animations: { [weak weakSelf = self] in
 				heightConstraint.constant = height;
 				weakSelf?.view.layoutIfNeeded();
 			}, completion: { [weak weakSelf = self] _ in
@@ -94,21 +94,21 @@ class NavigationViewControllerImp: AbstractViewController<NavigationViewControll
 	
 	func scrollBy(x: CGFloat) {
 		if let view = wkWebView?.scrollView {
-			UIView.animate(withDuration: 0.1, animations: {
+			UIView.animate(withDuration: 0.3, animations: {
 				view.contentOffset.x = x;
 			});
 		}
 	}
 	
 	func showNavigation() {
-		UIView.animate(withDuration: 0.15, animations: { [weak weakSelf = self] in
+		UIView.animate(withDuration: 0.3, animations: { [weak weakSelf = self] in
 			weakSelf?.view.transform = CGAffineTransform.identity;
 		});
 	}
 	
 	func hideNavigation() {
 		let height = view.height;
-		UIView.animate(withDuration: 0.15, animations: { [weak weakSelf = self] in
+		UIView.animate(withDuration: 0.3, animations: { [weak weakSelf = self] in
 			weakSelf?.view.transform = CGAffineTransform.identity.translatedBy(x: 0, y: height);
 		});
 	}

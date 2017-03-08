@@ -16,6 +16,7 @@
 		3D01AC4F1E695C7700EFA090 /* ViewPagerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D01AC4E1E695C7700EFA090 /* ViewPagerController.swift */; };
 		3D01AC511E695D3C00EFA090 /* ViewPagerControllerImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D01AC501E695D3C00EFA090 /* ViewPagerControllerImp.swift */; };
 		3D01AC531E69619300EFA090 /* ViewPagerControllerPresenterImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D01AC521E69619300EFA090 /* ViewPagerControllerPresenterImp.swift */; };
+		3D3186851E70155600AFA152 /* TitleChangeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3186841E70155600AFA152 /* TitleChangeEvent.swift */; };
 		3D6EAA831E699CFB0050DE90 /* ReadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6EAA821E699CFB0050DE90 /* ReadViewController.swift */; };
 		3D7BFD471E6890ED00DD365B /* PublicationCocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D7BFD451E6890ED00DD365B /* PublicationCocoa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D7BFD571E68913C00DD365B /* Swinject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D7BFD4E1E68913C00DD365B /* Swinject.framework */; };
@@ -50,6 +51,7 @@
 		3D01AC4E1E695C7700EFA090 /* ViewPagerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPagerController.swift; sourceTree = "<group>"; };
 		3D01AC501E695D3C00EFA090 /* ViewPagerControllerImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPagerControllerImp.swift; sourceTree = "<group>"; };
 		3D01AC521E69619300EFA090 /* ViewPagerControllerPresenterImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPagerControllerPresenterImp.swift; sourceTree = "<group>"; };
+		3D3186841E70155600AFA152 /* TitleChangeEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleChangeEvent.swift; sourceTree = "<group>"; };
 		3D6EAA821E699CFB0050DE90 /* ReadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadViewController.swift; sourceTree = "<group>"; };
 		3D7BFD421E6890ED00DD365B /* PublicationCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PublicationCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D7BFD451E6890ED00DD365B /* PublicationCocoa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PublicationCocoa.h; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				3D7BFD6D1E689C5E00DD365B /* VisibilityChange.swift */,
 				3D7BFD771E68B84500DD365B /* PageSelectedByUri.swift */,
 				3D7BFD7C1E68C47700DD365B /* PageSelectedByIndex.swift */,
+				3D3186841E70155600AFA152 /* TitleChangeEvent.swift */,
 			);
 			name = Events;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				3D7BFD7F1E68C67200DD365B /* Configuration.swift in Sources */,
 				3D6EAA831E699CFB0050DE90 /* ReadViewController.swift in Sources */,
 				3D01AC471E68D7AB00EFA090 /* SystemJS.swift in Sources */,
+				3D3186851E70155600AFA152 /* TitleChangeEvent.swift in Sources */,
 				3D7BFD741E68AF0800DD365B /* ContentViewControllerPresenterImp.swift in Sources */,
 				3D01AC431E68D4C200EFA090 /* NavigationViewControllerPresenter.swift in Sources */,
 				3D01AC511E695D3C00EFA090 /* ViewPagerControllerImp.swift in Sources */,

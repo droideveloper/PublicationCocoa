@@ -51,9 +51,9 @@ class ContentViewControllerPresenterImp: AbstractPresenter<ContentViewController
 	
 	override func viewDidLoad() {
 		super.viewDidLoad();
-		view.showProgress();
+		view?.showProgress();
 		if let contentUrl = contentUrl {
-			view.load(url: contentUrl);
+			view?.load(url: contentUrl);
 		}
 	}
 	
@@ -62,7 +62,7 @@ class ContentViewControllerPresenterImp: AbstractPresenter<ContentViewController
 		if let url = urlRequest.url {
 			if let scheme = url.scheme {
 				if scheme == SCHEME_HTTP || scheme == SCHEME_HTTPS {
-					view.openUrl(url: url);
+					view?.openUrl(url: url);
 					decisionHandler(.cancel);
 				} else if scheme == SCHEME_FILE {
 					if contentUrl == url {
@@ -83,7 +83,7 @@ class ContentViewControllerPresenterImp: AbstractPresenter<ContentViewController
 	}
 	
 	func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-		view.hideProgress();
+		view?.hideProgress();
 	}
 	
 	func doubleTap(gesture: UITapGestureRecognizer) {

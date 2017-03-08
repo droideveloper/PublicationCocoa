@@ -25,6 +25,8 @@ open class ReadViewController: ToolbarController, LogType {
 	private let dispose = DisposeBag();
 	private var displayState: Bool = false;
 	
+	private var callback: (() -> Void)?;
+	
 	private var pageButton: IconButton? {
 		get {
 			for view in toolbar.rightViews {
@@ -36,13 +38,38 @@ open class ReadViewController: ToolbarController, LogType {
 		}
 	}
 	
-	public convenience init(book url: URL, dependency injector: Container) {
-		if let viewController = injector.resolve(ViewPagerController.self) as? ViewPagerControllerImp {
-			viewController.directory = url;
-			self.init(rootViewController: viewController);
-		} else {
-			fatalError("can not create viewController");
+	open override func layoutSubviews() {
+		super.layoutSubviews();
+		switch toolbarDisplay {
+		case .full:
+			if let statusBarController = statusBarController {
+				let h = statusBarController.statusBar.height;
+				rootViewController.view.y = h;
+				rootViewController.view.height = view.height - h;
+			}
+		case .partial:
+			break;
 		}
+	}
+	
+	public convenience init(book url: URL, callback: (() -> Void)? = nil) {
+		if let component = Application.shared?.component as? Container {
+			if let viewController = component.resolve(ViewPagerController.self) as? ViewPagerControllerImp {
+				viewController.directory = url;
+				self.init(rootViewController: viewController);
+				self.callback = callback;
+			} else {
+				fatalError("can not resolve viewController since ApplicationType not implemented in UIApplicationDelegate");
+			}
+		} else {
+			fatalError("ApplicationType not implemented in UIApplicationDelegate");
+		}
+	}
+	
+	open override func viewWillAppear(_ animated: Bool) {
+		super.viewDidAppear(animated);
+		// however this produce something interesting bug
+		self.toolbarDisplay = .full;
 	}
 	
 	open override func viewDidLoad() {
@@ -50,7 +77,9 @@ open class ReadViewController: ToolbarController, LogType {
 		BusManager.register(next: { [weak weakSelf = self] evt in
 			if let event = evt as? PageSelectedByIndex {
 				weakSelf?.setCurrentPageText(at: event.index);
-			} else if let _ = evt as? VisibilityChange {
+			} else if let event = evt as? TitleChangeEvent {
+				weakSelf?.toolbar.title = event.title;
+			}	else if let _ = evt as? VisibilityChange {
 				weakSelf?.toggleDisplayState();
 			}
 		}).addDisposableTo(dispose);
@@ -70,8 +99,7 @@ open class ReadViewController: ToolbarController, LogType {
 			statusBar.backgroundColor = theme.colorPrimaryDark;
 			toolbar.backgroundColor = theme.colorPrimary;
 			
-			display = .full;
-			
+			toolbar.titleLabel.textColor = .white;
 			toolbar.titleLabel.font = RobotoFont.light(with: 16);
 			toolbar.titleLabel.textAlignment = .left;
 		}
@@ -80,13 +108,16 @@ open class ReadViewController: ToolbarController, LogType {
 		backButton.addTarget(self, action: #selector(backPressed), for: .touchUpInside);
 		toolbar.leftViews = [backButton];
 		
-		let pageButton = IconButton(title: "0", titleColor: .white);
+		let pageButton = IconButton(title: "1", titleColor: .white);
 		toolbar.rightViews = [pageButton];
 	}
 	
 	func backPressed() {
 		if let navigationController = navigationController  {
 			navigationController.popViewController(animated: true);
+		}
+		if let callback = callback {
+			callback();
 		}
 	}
 	
@@ -100,24 +131,22 @@ open class ReadViewController: ToolbarController, LogType {
 	}
 	
 	func showToolbar() {
-		let height = toolbar.height + statusBar.height;
-		UIView.animate(withDuration: 0.15, animations: { [weak weakSelf = self] in
-			weakSelf?.toolbar.y += height;
-			weakSelf?.toolbar.layoutIfNeeded();
+		let translateY = self.toolbar.height + self.statusBar.height;
+		UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+			self.toolbar.y += translateY;
 		});
 	}
 	
 	func hideToolbar() {
-		let height = toolbar.height + statusBar.height;
-		UIView.animate(withDuration: 0.15, animations: { [weak weakSelf = self] in
-			weakSelf?.toolbar.y -= height;
-			weakSelf?.toolbar.layoutIfNeeded();
+		let translateY = self.toolbar.height + self.statusBar.height;
+		UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+			self.toolbar.y -= translateY;
 		});
 	}
 	
 	open func setCurrentPageText(at index: Int) {
 		if let pageButton = pageButton {
-			pageButton.title = "\(index)";
+			pageButton.title = "\(index + 1)";
 		}
 	}
 	

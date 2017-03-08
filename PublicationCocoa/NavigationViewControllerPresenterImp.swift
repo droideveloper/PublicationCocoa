@@ -57,7 +57,7 @@ class NavigationViewControllerPresenterImp: AbstractPresenter<NavigationViewCont
 	override func viewDidLoad() {
 		super.viewDidLoad();
 		if let file = file {
-			view.load(url: file);
+			view?.load(url: file);
 		}
 		BusManager.register(next: { [weak weakSelf = self] evt in
 			if let event = evt as? PageSelectedByIndex {
@@ -75,7 +75,7 @@ class NavigationViewControllerPresenterImp: AbstractPresenter<NavigationViewCont
 			if let data = message.body as? [String: CGFloat] {
 				let width = data[SystemJS.kWidth] ?? 0;
 				let height = data[SystemJS.kHeight] ?? 0;
-				view.viewFrame(width: width, height: height);
+				view?.viewFrame(width: width, height: height);
 			}
 		} else if message.name == SystemJS.contentUpdate {
 			if let data = message.body as? [String: Any] {
@@ -93,7 +93,7 @@ class NavigationViewControllerPresenterImp: AbstractPresenter<NavigationViewCont
 	}
 	
 	func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-		view.loadJS(js: SystemJS.js);
+		view?.loadJS(js: SystemJS.js);
 	}
 	
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -101,7 +101,7 @@ class NavigationViewControllerPresenterImp: AbstractPresenter<NavigationViewCont
 		if let url = urlRequest.url {
 			if let scheme = url.scheme {
 				if scheme == SCHEME_HTTP || scheme == SCHEME_HTTPS {
-					view.openUrl(url: url);
+					view?.openUrl(url: url);
 					decisionHandler(.cancel);
 				} else if scheme == SCHEME_FILE {
 					if file == url {
@@ -123,9 +123,9 @@ class NavigationViewControllerPresenterImp: AbstractPresenter<NavigationViewCont
 	
 	func toggleView() {
 		if displayState {
-			view.showNavigation();
+			view?.showNavigation();
 		} else {
-			view.hideNavigation();
+			view?.hideNavigation();
 		}
 		displayState = !displayState;
 	}
@@ -144,7 +144,7 @@ class NavigationViewControllerPresenterImp: AbstractPresenter<NavigationViewCont
 	func scrollXBy(position: Int) {
 		if let x = positions[position] {
 			if x >= 0 {
-				view.scrollBy(x: x);
+				view?.scrollBy(x: x);
 			}
 		}
 	}

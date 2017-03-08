@@ -45,8 +45,8 @@ class ViewPagerControllerImp: AbstractViewPagerController<ViewPagerControllerPre
 	}
 	
 	func addNavigationViewController(for url: URL?, with contents: [String]?) {
-		if let dependencyInjector = application?.dependencyInjector as? Container {
-			if let navigationViewController = dependencyInjector.resolve(NavigationViewController.self) as? NavigationViewControllerImp {
+		if let component = application?.component as? Container {
+			if let navigationViewController = component.resolve(NavigationViewController.self) as? NavigationViewControllerImp {
 				if let navigationViewControllerPresenter = navigationViewController.presenter as? NavigationViewControllerPresenterImp {
 					navigationViewControllerPresenter.file = url;
 					navigationViewControllerPresenter.contents = contents;
