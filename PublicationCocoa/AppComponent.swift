@@ -20,28 +20,28 @@ import Swinject
 
 open class AppComponent {
 	
-	open var dependencyInjector: Container;
+	open var component: Container;
 	
 	public init() {
-		self.dependencyInjector = Container();
-		self.dependencyInjector.register(FileStorageType.self) { _ in
+		self.component = Container();
+		self.component.register(FileStorageType.self) { _ in
 			return FileStorage();
 		}.inObjectScope(.container);
-		self.dependencyInjector.register(ContentViewController.self) { _ in
+		self.component.register(ContentViewController.self) { _ in
 			return ContentViewControllerImp();
 		}.initCompleted { (_, viewController) in
 			if let viewController = viewController as? ContentViewControllerImp {
 				viewController.presenter = ContentViewControllerPresenterImp(viewController);
 			}
 		}.inObjectScope(.graph);
-		self.dependencyInjector.register(NavigationViewController.self) { _ in
+		self.component.register(NavigationViewController.self) { _ in
 			return NavigationViewControllerImp();
 		}.initCompleted { (_, viewController) in
 			if let viewController = viewController as? NavigationViewControllerImp {
 				viewController.presenter = NavigationViewControllerPresenterImp(viewController);
 			}
 		}.inObjectScope(.graph);
-		self.dependencyInjector.register(ViewPagerController.self) { _ in
+		self.component.register(ViewPagerController.self) { _ in
 			return ViewPagerControllerImp();
 		}.initCompleted { (_, viewController) in
 			if let viewController = viewController as? ViewPagerControllerImp {
